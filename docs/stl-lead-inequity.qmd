@@ -43,7 +43,17 @@ stl_lead_plot
 ```
 
 ```{r}
+#| fig-height: 7
+#| fig-width: 12
+ggplot(data = stl_lead_prop,
+       aes(x = pct_elevated,
+           y = prop_white)) +
+  geom_point(alpha = 0.5)
+```
+
+```{r}
 ggsave(here("figs", "stl_lead_plot.jpg"), height = 5, width = 6)
+
 ```
 
 As the pct elevated increases, it looks like the prop_white decreases
