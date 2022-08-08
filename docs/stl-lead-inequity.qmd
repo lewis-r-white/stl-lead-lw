@@ -1,0 +1,58 @@
+---
+title: "stl lead inequity"
+author: "Lewis White"
+format: html
+editor: visual
+execute:
+  echo: true
+  warning: false
+---
+
+## 
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+```
+
+```{r}
+stl_lead <- read_delim(here("data", "stl_blood_lead.csv")) %>%
+  janitor::clean_names()
+```
+
+```{r}
+#creating new dataset with proportion column included
+
+stl_lead_prop <- stl_lead %>%
+  mutate(prop_white = (white / total_pop) * 100) %>%
+  mutate(pct_elevated = str_replace(pct_elevated, ",", ".")) %>%
+  mutate(pct_elevated = as.numeric(pct_elevated))
+```
+
+```{r}
+#storing the plot
+stl_lead_plot <- ggplot(data = stl_lead_prop,
+       aes(x = pct_elevated,
+           y = prop_white,
+           height = 6, 
+           width = 5)) +
+  geom_point(alpha = 0.5)
+
+stl_lead_plot
+```
+
+```{r}
+ggsave(here("figs", "stl_lead_plot.jpg"), height = 5, width = 6)
+```
+
+As the pct elevated increases, it looks like the prop_white decreases
+
+```{r}
+ggplot(stl_lead_prop, aes(x = pct_elevated)) + 
+         geom_histogram(color = "white", fill = "darkorchid4")
+```
+
+```{r}
+ggsave(here("figs", "stl_lead_histogram.jpg"), height = 7, width = 9)
+```
